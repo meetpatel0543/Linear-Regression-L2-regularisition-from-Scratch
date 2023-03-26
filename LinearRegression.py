@@ -22,7 +22,7 @@ class LinearRegression:
     self.weights = None
     self.bias = None
 
-  def fit(self, X, y, batch_size=32, regularization=0, max_epochs=100, patience=3, alpha= 0.01,problem=2):
+  def fit(self, X, y, batch_size=32, regularization=0, max_epochs=100, patience=3, alpha= 0.01):
     """Fit a linear model.
     Parameters:
     -----------
@@ -40,18 +40,13 @@ class LinearRegression:
     self.regularization = regularization
     self.max_epochs = max_epochs
     self.patience = patience
-    self.problem = problem
     self.train_error_list = []
     self.validation_error_list = []
 
     np.random.seed(10)
     # TODO: Initialize the weights and bias based on the shape of X and y.
     # add 1 in input for bias term
-    if self.problem==2:
-      X = np.hstack((np.ones((X.shape[0],1)),X))
-    else:
-      X = np.hstack((np.ones((X.shape[0],1)),X[:,None]))
-    print("X", X.shape)
+    X = np.hstack((np.ones((X.shape[0],1)),X))
     n_samples, n_features = X.shape
 
     # split X into train and validation
@@ -59,19 +54,8 @@ class LinearRegression:
     Y_train_2 = y[:int(0.9*n_samples)]
     X_validation = X[int(0.9*n_samples):,:]
     Y_validation = y[int(0.9*n_samples):]
-    # print("X", X.shape)
-    # print("X_train2", X_train_2.shape)
-    # print("Y_train_2",Y_train_2.shape)
-    # print("X_validation",X_validation.shape)
-    # print("Y_validation",Y_validation.shape)
     
-    if self.problem==2:
-      self.weights = np.random.uniform(-1,1,(n_features,36))
-      print("weights size",self.weights.shape)
-    else:
-      self.weights = np.random.uniform(-1,1,(n_features,))
-    # self.weights = np.random.uniform(-1,1,(n_features,np.array(x).reshape(-1).shape[0]))
-    print("weights",self.weights)
+    self.weights = np.random.uniform(-1,1,(n_features,))
 
     def gradient(X,y):
       return (2/len(y))*np.sum(np.dot(X,self.weights)-y)
